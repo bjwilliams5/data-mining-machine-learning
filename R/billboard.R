@@ -10,13 +10,22 @@ billboard_top10 <- billboard %>%
   arrange(desc(count)) %>% 
   head(n = 10)
 
-billboard_unique <- billboard %>% 
+billboard_byyear <- billboard %>% 
   filter(year > 1958, year <2021) %>% 
   select(performer, song, year) %>% 
   unique() %>% 
   group_by(year) %>% 
   summarize(count = n())
 
-ggplot(billboard_unique) + 
+ggplot(billboard_byyear) + 
   geom_line(aes(x=year, y=count))
+  
+
+billboard %>% 
+  filter(year > 1958, year <2021) %>% 
+  filter(week > 9) %>% 
+  select(performer, song) %>% 
+  unique()
+  summarize(count = n()) %>% 
+  filter(count >= 30)
   
