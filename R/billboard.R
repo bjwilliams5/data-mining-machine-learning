@@ -21,11 +21,12 @@ ggplot(billboard_byyear) +
   geom_line(aes(x=year, y=count))
   
 
-billboard %>% 
+billboard_10week <- billboard %>% 
   filter(year > 1958, year <2021) %>% 
-  filter(week > 9) %>% 
+  filter(week >= 10) %>% 
   select(performer, song) %>% 
-  unique()
+  unique() %>% 
+  group_by(performer) %>% 
   summarize(count = n()) %>% 
   filter(count >= 30)
   
