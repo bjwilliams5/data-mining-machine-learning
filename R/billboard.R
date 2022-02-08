@@ -3,6 +3,9 @@ library(tidyverse)
 
 billboard <- read_csv(here("Data/billboard_clean.csv"))
   
+
+## PART A
+
 billboard_top10 <- billboard %>% 
 
   group_by(performer, song) %>% 
