@@ -53,8 +53,7 @@ sclass_65_test  = testing(sclass_65_split)
 
 ## Define a series of k values
 
-k_grid = c(2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 25, 30, 35, 40, 45,
-           50, 60, 70, 80, 90, 100)
+k_grid = c(1:100)
 
 ## Run a loop to determine the RMSE for each value of k.
 
@@ -68,7 +67,9 @@ knn_350 <- foreach(k = k_grid, .combine='rbind') %do% {
 knn350_rmse <- data.frame(knn_350, k_grid)
 
 ggplot(knn350_rmse) +
-  geom_line(aes(x = k_grid, y = knn_350))
+  geom_line(aes(x = k_grid, y = knn_350)) +
+  geom_hline(yintercept = 11526, color = 'red') +
+  geom_hline(yintercept = 10176, color = 'blue')
 
 
 ## For 350 Trim
@@ -81,4 +82,6 @@ knn_65 <- foreach(k = k_grid, .combine='rbind') %do% {
 knn65_rmse <- data.frame(knn_65, k_grid)
 
 ggplot(knn65_rmse) +
-  geom_line(aes(x = k_grid, y = knn_65))
+  geom_line(aes(x = k_grid, y = knn_65)) +
+  geom_hline(yintercept = 44953, color = 'red') +
+  geom_hline(yintercept = 30722, color = 'blue')
