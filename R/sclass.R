@@ -43,11 +43,11 @@ rmse(lm65_2, sclass_65)
 
 ## Create train / test splits
 
-sclass_350_split =  initial_split(sclass_350, prop=0.9)
+sclass_350_split =  initial_split(sclass_350, prop=0.8)
 sclass_350_train = training(sclass_350_split)
 sclass_350_test  = testing(sclass_350_split)
 
-sclass_65_split =  initial_split(sclass_65, prop=0.9)
+sclass_65_split =  initial_split(sclass_65, prop=0.8)
 sclass_65_train = training(sclass_65_split)
 sclass_65_test  = testing(sclass_65_split)
 
