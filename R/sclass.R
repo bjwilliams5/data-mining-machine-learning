@@ -51,6 +51,19 @@ sclass_65_split =  initial_split(sclass_65, prop=0.9)
 sclass_65_train = training(sclass_65_split)
 sclass_65_test  = testing(sclass_65_split)
 
+## Take a look at K = 20
+
+
+knn350_20 <- 
+  knnreg(price ~ mileage, data=sclass_350_train, k=20)
+
+sclass_350_test = sclass_350_test %>%
+  mutate(price_pred = predict(knn350_20, sclass_350_test))
+
+ggplot(data = sclass_350_test) + 
+  geom_point(mapping = aes(x = mileage, y = price), alpha=0.2) + 
+  geom_line(aes(x = mileage, y = price_pred), color='red', size=1.5)
+
 ## Define a series of k values
 
 k_grid = c(1:100)
@@ -63,6 +76,7 @@ knn_350 <- foreach(k = k_grid, .combine='rbind') %do% {
   rmse(knnreg(price ~ mileage, data=sclass_350_train, k=k), sclass_350_test)
   
 }
+
 
 knn350_rmse <- data.frame(knn_350, k_grid)
 
