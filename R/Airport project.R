@@ -7,8 +7,9 @@ library(maptools)
 library(ggplot2)
 library(rgdal)
 library(viridis)
+library(here)
 
-ABIA <- read.csv("~/R/Data Mining/Data mining examples/ABIA.csv")
+ABIA <- read.csv(here("Data/ABIA.csv"))
 
 ## Let's take a look at what average delays look like for flights out of Austin 
 
