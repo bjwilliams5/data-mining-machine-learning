@@ -20,7 +20,7 @@ ABIA_stats = ABIA %>%
   summarize(count = n(),
             mean_arr_delay = mean(ArrDelay, na.rm=TRUE)) %>% 
   filter(count > 499)
-ABIA_stats
+mean(ABIA_stats$mean_arr_delay)
 
 ggplot(ABIA_stats) +
   geom_col(aes(x = mean_arr_delay, fct_reorder(Dest, mean_arr_delay), fill = mean_arr_delay)) +
@@ -70,7 +70,8 @@ ABIA_locations <- ABIA_locations %>%
   filter(count > 499)
 
 
-ABIA_transformed <- usmap_transform(ABIA_locations)
+ABIA_transformed <- usmap_transform(ABIA_locations) %>% 
+  filter(mean_arr_delay > 0)
 
 ABIA_hubs <- ABIA_transformed %>% 
   filter(Dest == "DEN" |
@@ -100,7 +101,7 @@ plot_usmap() +
   geom_point(data = ABIA_transformed, aes(x = Longitude.1, y = Latitude.1, colour = mean_arr_delay, size = mean_arr_delay),
              alpha = 0.8) +
   scale_color_continuous_sequential(palette = "Heat", guide = "legend") +
-  scale_size_continuous(range = c(1, 16)) +
+  scale_size_continuous(range = c(1, 20), breaks = c(0, 2, 4, 6, 8, 10)) +
   ggrepel::geom_label_repel(data = ABIA_hubs,
                             aes(x = Longitude.1, y = Latitude.1, label = Dest),
                             size = 3, alpha = 0.8,
@@ -110,6 +111,23 @@ plot_usmap() +
   labs(title = "Worst Arrival Delays by Airport",
        subtitle = "Arriving from Austin (At Least 500 Flights)") + 
   theme(legend.position = "right")
+
+plot_usmap() +
+  geom_point(data = ABIA_transformed, aes(x = Longitude.1, y = Latitude.1, colour = mean_arr_delay, size = mean_arr_delay),
+             alpha = 0.8) +
+  scale_color_continuous_sequential(palette = "Heat", guide = "legend", breaks = c(2, 4, 6, 8, 10, 12, 14), limits = c(0, 15)) +
+  scale_size_continuous(range = c(1, 15), breaks = c(2, 4, 6, 8, 10, 12, 14), limits = c(0, 15)) +
+  ggrepel::geom_label_repel(data = ABIA_hubs,
+                            aes(x = Longitude.1, y = Latitude.1, label = Dest),
+                            size = 3, alpha = 0.8,
+                            label.r = unit(0.5, "lines"), label.size = 0.5,
+                            segment.color = "red", segment.size = 1,
+                            seed = 1002) +
+  labs(title = "Worst Arrival Delays by Airport",
+       subtitle = "Arriving from Austin (At Least 500 Flights)"
+  ) + 
+  theme(legend.position = "right") +
+  guides(size=guide_legend(title="Arrival Delay"), color=guide_legend(title="Arrival Delay"))
 
 plot_usmap() +
   geom_point(data = ABIA_transformed, aes(x = Longitude.1, y = Latitude.1, color = mean_arr_delay),
