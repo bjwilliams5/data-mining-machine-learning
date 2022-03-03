@@ -87,6 +87,18 @@ saratoga_scaled <- scale(saratoga_matrix, center = FALSE, scale = apply(saratoga
 
 saratoga_folds2 = crossv_kfold(saratoga_scaled, k=K_folds)
 
+for (i in K_folds) {
+  train[1,i] = saratoga_folds2$train$'[1,i]' %>%  
+    as.data.frame() 
+}
+
+i = 1
+train = saratoga_folds2[1,i] %>%  
+  as.data.frame() 
+
+train = saratoga_folds2$train$'1' %>%  
+  as.data.frame() 
+
 cv_grid2 = foreach(k = k_grid, .combine='rbind') %dopar% {
   models = map(saratoga_folds2$train, ~ knnreg(price ~ lotSize + age + livingArea + pctCollege + bedrooms + 
                                                 fireplaces + bathrooms + rooms + heatinghot_air + heatinghot_water_steam, k=k, data = ., use.all=FALSE))
