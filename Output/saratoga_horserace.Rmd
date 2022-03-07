@@ -7,6 +7,7 @@ output: md_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+options(scipen=999, digits = 0)
 library(tidyverse)
 library(mosaic)
 library(airportr)
@@ -41,9 +42,9 @@ Patrick Massey, Harrison Snell, Brandon Williams
 We consider three models for predicting the sale price of a house for tax authority purposes. In order to assess the predictive power of each, we conduct a "horse race" to determine who has the best predictive ability when compared to a withheld testing set of the data by evaluating root mean squared error (RMSE); generally, the lower the RMSE the better. The three models are:
 
 
-* Simple linear model (our medium benchmark model)
-* Linear model with additional features and an interaction term
-* K-Nearest Neighbor (KNN) regression
+  * Simple linear model (our medium benchmark model)
+  * Linear model with additional features and an interaction term
+  * K-Nearest Neighbor (KNN) regression
 
 
 For all three models, we use a train/test split of the data: the training data set is used to build the model and the testing set is used to evaluate the model's predictive accuracy. In order to account for random variation in the data depending on how we split it, we use k-fold cross-validation which takes k number (in this case, k=10) train/test splits and allows us to examine the average error over each split. 
