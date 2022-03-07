@@ -47,7 +47,7 @@ training <- foreach (i = 1:K_folds) %do% {
   colnames(scaled_train) <- sub(".*\\.", "", colnames(scaled_train))
   names(scaled_train) <- str_replace_all(names(scaled_train), c(" " = "." , "/" = "." ))
   
-  assign(train_name, scaled_test)
+  assign(train_name, scaled_train)
 
 }
 
@@ -75,7 +75,7 @@ testing <- foreach (i = 1:K_folds) %do% {
   colnames(scaled_test) <- sub(".*\\.", "", colnames(scaled_test))
   names(scaled_test) <- str_replace_all(names(scaled_test), c(" " = "." , "/" = "." ))
   
-  assign(test_name, scaled_train)
+  assign(test_name, scaled_test)
   
 }
 
@@ -165,7 +165,7 @@ better_rmse = foreach(i = 1:K_folds, .combine='rbind') %dopar% {
   
   # calculate rmse across all folds
     
-  lm_better = lm(price ~ . - pctCollege - sewer - newConstruction, data=train)
+  lm_better = lm(price ~ . - pctCollege - sewer - heating + lotSize * waterfront, data=train)
   rmse(lm_better, test)
 }
 
@@ -196,3 +196,4 @@ avg_rmse_better
 min_rmse
 min_rmse2
 avg_rmse_baseline
+
