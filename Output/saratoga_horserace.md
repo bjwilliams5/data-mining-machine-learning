@@ -25,16 +25,16 @@ Consider first the baseline model. This model uses 11 main effects from
 the data set in a linear regression. It includes the variables lot size,
 age, living area, bedrooms, fireplaces, bathrooms, rooms, heating
 method, fuel method, and central air. This model performed consistently
-the worst. In this iteration, for example, it acheived an average
-out-of-sample mean-squared error of `avg_rmse_baseline`.
+the worst. In this iteration, for example, it achieved an average
+out-of-sample mean-squared error of 6.6291713^{4}.
 
 This is to be expected. Economic intuition indicates that we are likely
-ommitting important considerations for house prices, notably land value,
+omitting important considerations for house prices, notably land value,
 waterfront access and whether or not it is a new construction. We add
 these to our linear model to improve it, as well as an interaction term
 for lot size and waterfront access. Indeed, we see significant
 improvement in the RMSE. In this iteration, we see a mean-squared error
-of `avg_rmse_better`.
+of 5.8349018^{4}.
 
 Finally, we attempt to create a KNN model. To begin, we include all
 possible covariates and attempt to identify the value of K neighbors
@@ -42,4 +42,4 @@ that gives us the lowest mean-squared error. The following graph shows
 the error on the vertical access and the value of k on the horizontal.
 
 ![](saratoga_horserace_files/figure-markdown_strict/unnamed-chunk-3-1.png)
-The minimum RMSE can be found at k=`min_k` with a RMSE of `min_rmse`.
+The minimum RMSE can be found at k=5 with a RMSE of 6.1665657^{4}.

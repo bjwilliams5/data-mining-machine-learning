@@ -171,10 +171,10 @@ avg_rmse_better <- mean(better_rmse)
 
 ```
 
-Consider first the baseline model. This model uses 11 main effects from the data set in a linear regression. It includes the variables lot size, age, living area, bedrooms, fireplaces, bathrooms, rooms, heating method, fuel method, and central air. This model performed consistently the worst. In this iteration, for example, it acheived an average out-of-sample mean-squared error of `avg_rmse_baseline`. 
+Consider first the baseline model. This model uses 11 main effects from the data set in a linear regression. It includes the variables lot size, age, living area, bedrooms, fireplaces, bathrooms, rooms, heating method, fuel method, and central air. This model performed consistently the worst. In this iteration, for example, it achieved an average out-of-sample mean-squared error of `r avg_rmse_baseline`. 
 
 
-This is to be expected. Economic intuition indicates that we are likely ommitting important considerations for house prices, notably land value, waterfront access and whether or not it is a new construction. We add these to our linear model to improve it, as well as an interaction term for lot size and waterfront access. Indeed, we see significant improvement in the RMSE. In this iteration, we see a mean-squared error of `avg_rmse_better`.
+This is to be expected. Economic intuition indicates that we are likely omitting important considerations for house prices, notably land value, waterfront access and whether or not it is a new construction. We add these to our linear model to improve it, as well as an interaction term for lot size and waterfront access. Indeed, we see significant improvement in the RMSE. In this iteration, we see a mean-squared error of `r avg_rmse_better`.
 
 Finally, we attempt to create a KNN model. To begin, we include all possible covariates and attempt to identify the value of K neighbors that gives us the lowest mean-squared error. The following graph shows the error on the vertical access and the value of k on the horizontal.
 
@@ -207,4 +207,4 @@ opt_k = cv_grid%>%
 min_k = opt_k[1,1]
 min_rmse = opt_k[1,2]
 ```
-The minimum RMSE can be found at k=`min_k` with a RMSE of `min_rmse`.
+The minimum RMSE can be found at k=`r min_k` with a RMSE of `r min_rmse`.
