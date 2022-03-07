@@ -38,7 +38,9 @@ Patrick Massey, Harrison Snell, Brandon Williams
 
 ## Problem 2
 
-We consider three models for predicting the sale price of a house for tax authority purposes. In order to assess the predictive power of each, we conduct a "horse race" to determine who has the best predictive ability when compared to a withheld testing set of the data. The three models are:
+We consider three models for predicting the sale price of a house for tax authority purposes. In order to assess the predictive power of each, we conduct a "horse race" to determine who has the best predictive ability when compared to a withheld testing set of the data by evaluating root mean squared error (RMSE); generally, the lower the RMSE the better. The three models are:
+
+
 * Simple linear model (our medium benchmark model)
 * Linear model with additional features and an interaction term
 * K-Nearest Neighbor (KNN) regression
@@ -176,6 +178,7 @@ Consider first the baseline model. This model uses 11 main effects from the data
 
 This is to be expected. Economic intuition indicates that we are likely omitting important considerations for house prices, notably land value, waterfront access and whether or not it is a new construction. We add these to our linear model to improve it, as well as an interaction term for lot size and waterfront access. Indeed, we see significant improvement in the RMSE. In this iteration, we see a mean-squared error of `r avg_rmse_better`.
 
+
 Finally, we attempt to create a KNN model. To begin, we include all possible covariates and attempt to identify the value of K neighbors that gives us the lowest mean-squared error. The following graph shows the error on the vertical access and the value of k on the horizontal.
 
 ```{r warning=FALSE, message=FALSE}
@@ -207,4 +210,6 @@ opt_k = cv_grid%>%
 min_k = opt_k[1,1]
 min_rmse = opt_k[1,2]
 ```
-The minimum RMSE can be found at k=`r min_k` with a RMSE of `r min_rmse`.
+
+
+The minimum RMSE can be found at k=`r min_k` with a RMSE of `r min_rmse`. Consistently, across many iterations of train/test splits, the KNN model had lower mean-squared errors than our baseline medium model but failed to beat the better linear model. It appears that the data available to us is better suited to the linear model we identified above. It is possible the KNN model is over-fitting to the data and therefore inducing higher RMSEs. 
