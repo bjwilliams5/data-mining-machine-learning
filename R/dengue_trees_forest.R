@@ -11,9 +11,8 @@ dengue <- read_csv("data/dengue.csv")
 
 # To avoid errors in partial plot, I need to clean the data a bit
 dengue <- dengue %>% 
-  as.data.frame() %>% 
-  na.omit() 
-
+  mutate(log_cases = log(total_cases+1)) %>% 
+  as.data.frame()
 
 # let's split our data into training and testing
 dengue_split =  initial_split(dengue, prop=0.8)
@@ -23,21 +22,20 @@ dengue_test  = testing(dengue_split)
 
 ## A tree with default control
 
-dengue.tree1 = rpart(total_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
+dengue.tree1 = rpart(log_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
                        dew_point_temp_k + max_air_temp_k + min_air_temp_k +
                        precip_amt_kg_per_m2 + relative_humidity_percent + specific_humidity + tdtr_k, 
                      data=dengue_train)
 
 ## Tree with modified control
 
-dengue.tree2 = rpart(total_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
+dengue.tree2 = rpart(log_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
                       dew_point_temp_k + max_air_temp_k + min_air_temp_k +
                       precip_amt_kg_per_m2 + relative_humidity_percent + specific_humidity + tdtr_k, 
-                    data=dengue_train,
-                    control = rpart.control(cp = 0.0000001, minsplit=30))
+                    data=dengue_train)
 
 
-rpart.plot(dengue.tree2, digits=-5, type=4, extra=1)
+rpart.plot(dengue.tree2, type=4, extra=1)
 
 plotcp(dengue.tree2)
 
@@ -65,12 +63,12 @@ dengue.tree2_prune = prune_1se(dengue.tree2)
 
 dengue.tree2_prune
 
-rpart.plot(dengue.tree2_prune, digits=-5, type=4, extra=1)
+rpart.plot(dengue.tree2_prune, type=4, extra=1)
 
 # Random Forest
 
 
-dengue.forest = randomForest(total_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
+dengue.forest = randomForest(log_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
                              dew_point_temp_k + max_air_temp_k + min_air_temp_k +
                              precip_amt_kg_per_m2 + relative_humidity_percent + specific_humidity + tdtr_k,
                            data=dengue_train, importance = TRUE, na.action=na.omit)
@@ -87,20 +85,24 @@ vi = varImpPlot(dengue.forest, type=1)
 
 partialPlot(dengue.forest, dengue_test, 'specific_humidity', las=1)
 partialPlot(dengue.forest, dengue_test, 'precipitation_amt', las=1)
-partialPlot(dengue.forest, dengue_test, 'max_air_temp_k', las=1)
+partialPlot(dengue.forest, dengue_test, 'tdtr_k', las=1)
 
 
 ## Boosted 
 
-boost1 = gbm(total_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
+#Without season, how to add it back in?
+
+dengue_train$season = as.factor(dengue_train$season)
+
+boost1 = gbm(log_cases ~ season + precipitation_amt + avg_temp_k + air_temp_k + 
                dew_point_temp_k + max_air_temp_k + min_air_temp_k +
                precip_amt_kg_per_m2 + relative_humidity_percent + specific_humidity + tdtr_k,
              data=dengue_train,
-             interaction.depth=4, n.trees=500, shrinkage=.05)
+             interaction.depth=6, n.trees=10000, shrinkage=.001)
 
 # It doesn't like the season variable
 
-# Look at error curve -- stops decreasing much after ~300
+# Look at error curve
 gbm.perf(boost1)
 
 
